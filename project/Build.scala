@@ -20,7 +20,9 @@ object KafkaPipelineBuild extends Build {
 
   val elasticsearch = "org.elasticsearch" % "elasticsearch" % "1.3.4"
 
-    //val scala_logging = "com.typesafe.scala-logging" %% "scala-logging-slf4j" % "2.1.2"
+  val joda_time = "joda-time" % "joda-time" % "2.2"
+  val joda_convert = "org.joda" % "joda-convert" % "1.7"
+  //val scala_logging = "com.typesafe.scala-logging" %% "scala-logging-slf4j" % "2.1.2"
 
 	/*val projSettings = assemblySettings ++ Seq(
 	  scalaVersion := "2.10.2",
@@ -48,6 +50,8 @@ object KafkaPipelineBuild extends Build {
         libraryDependencies ++= Seq(slf4j),
         libraryDependencies ++= Seq(log4j),
         libraryDependencies ++= Seq(elasticsearch),
+        libraryDependencies ++= Seq(joda_time),
+        libraryDependencies ++= Seq(joda_convert),
         //libraryDependencies ++= Seq(scala_logging),
         resolvers += "clojars" at "http://clojars.org/repo"
 	  )

@@ -32,6 +32,7 @@ extends Handler ( messageQueue, requestQueue, id, config) {
       requestQueue.put(builder.createIndexRequest(msg))
     } catch {
       case e: Exception => logger.error(e.getMessage)
+        logger.error(msg)
     }
     
   }
