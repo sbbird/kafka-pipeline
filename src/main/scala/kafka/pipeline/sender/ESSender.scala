@@ -50,14 +50,46 @@ class ESSender (
 
 
   override def send(request:Request):Unit =  {
-    val es_index_request = request.asInstanceOf[ESIndexRequest]
-    brb.add(es_index_request.getIndexRequest);
-	count+=1;
-	if (brb.numberOfActions() >= batchsize) {
-	  sendBulkRequest
-	}
+   
+    try {
+
+
+    request match {
+      case es_index_request:ESIndexRequest =>
+        brb.add(es_index_request.getIndexRequest);
+	    count+=1;
+	    if (brb.numberOfActions() >= batchsize) {
+	      sendBulkRequest
+	    }
+      case _ =>
+        count+=1
+        if (count >= batchsize){
+          val mybatch = batchsize
+          val elapsedTime = System.currentTimeMillis - startTime
+          val throughput = mybatch * 1000 / elapsedTime
+          logger.info(f"ESSender $id%d Insert $mybatch%d records in this batch, " +
+            f"elapsed time $elapsedTime%d ms, throughput $throughput%d ops, "+
+            f"total records $count%d")
+
+          startTime = System.currentTimeMillis
+	    }
+    }
+    } catch {
+      case e: Exception => logger.error(e.getMessage)
+    }
+
+
+/*      val es_index_request = request.asInstanceOf[ESIndexRequest]
+       brb.add(es_index_request.getIndexRequest);
+	  count+=1;
+	  if (brb.numberOfActions() >= batchsize) {
+	    sendBulkRequest
+	  }
+ */
 
   }
+
+  
 
   private def createESClient(config:Configure):Client = {
     val hosts = config.getESHosts.split(",")

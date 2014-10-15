@@ -34,6 +34,9 @@ object KafkaPipelineBuild extends Build {
 	  }
 	)*/
 
+  val jackson_scala = "com.fasterxml.jackson.module" % "jackson-module-scala_2.10" % "2.4.2"
+  val jackson_databind = "com.fasterxml.jackson.core" % "jackson-databind" % "2.4.2"
+
   val projSettings = SbtOneJar.oneJarSettings ++ Seq(
 	scalaVersion := "2.10.4",
 	mainClass in oneJar := Some("kafka.pipeline.main")
@@ -52,6 +55,8 @@ object KafkaPipelineBuild extends Build {
         libraryDependencies ++= Seq(elasticsearch),
         libraryDependencies ++= Seq(joda_time),
         libraryDependencies ++= Seq(joda_convert),
+        libraryDependencies ++= Seq(jackson_scala),
+        libraryDependencies ++= Seq(jackson_databind),
         //libraryDependencies ++= Seq(scala_logging),
         resolvers += "clojars" at "http://clojars.org/repo"
 	  )

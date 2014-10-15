@@ -23,13 +23,13 @@ abstract class Handler (
       count += 1
       val msg = messageQueue.take
       handle(msg)
-     // if ( id == 0 && count ==1000){
-     //   logger.debug("=============== BlockingQueue Debuging ============")
-     //   logger.debug(messageQueue.size.toString)
-     //   logger.debug(requestQueue.size.toString)
-     //   logger.debug("===============================================")
-     //  count = 0
-     // }
+   //   if ( id == 0 && count ==1000){
+   //     logger.debug("=============== BlockingQueue Debuging ============")
+   //     logger.debug(messageQueue.size.toString)
+   //     logger.debug(requestQueue.size.toString)
+   //    logger.debug("===============================================")
+   //     count = 0
+   //   }
 
     }
   }

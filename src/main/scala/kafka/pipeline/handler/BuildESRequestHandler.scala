@@ -24,9 +24,6 @@ extends Handler ( messageQueue, requestQueue, id, config) {
   private val builder = new ESIndexRequestBuilder(config)
 
 
-
-
-
   override def handle(msg:String):Unit = {
     try{
       requestQueue.put(builder.createIndexRequest(msg))

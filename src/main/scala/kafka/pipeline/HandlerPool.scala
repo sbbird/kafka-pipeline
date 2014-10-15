@@ -30,7 +30,8 @@ class HandlerPool (
     logger.info("Handler running")
     for (i <- (1 to config.getNumHandler)){
       _executor.submit( new BuildESRequestHandler(messageQueue, requestQueue, i-1, config))
-    } 
+      //_executor.submit( new SimpleHandler(messageQueue, requestQueue, i-1, config))
+    }
   }
 
   def shutdown: Unit = {
