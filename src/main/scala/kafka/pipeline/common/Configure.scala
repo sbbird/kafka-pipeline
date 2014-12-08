@@ -27,6 +27,8 @@ class Configure (private val prop:Map[String, String]) {
   @BeanProperty val indexTTL:Int = getFromProp("index.ttl", "0")
   @BeanProperty val ESHosts = getFromProp("es.hosts")
 
+
+
   @BeanProperty val ESClusterName = getFromProp("es.cluster.name")
   @BeanProperty val batchSize:Int = getFromProp("batch.size", "100")
   override def toString(): String = {

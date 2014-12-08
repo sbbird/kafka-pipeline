@@ -53,27 +53,28 @@ class ESSender (
    
     try {
 
+      request match {
+        case es_index_request:ESIndexRequest =>
+          brb.add(es_index_request.getIndexRequest);
+	      count+=1;
+	      if (brb.numberOfActions() >= batchsize) {
+	        sendBulkRequest
+	      }
+        case _ =>
+          /* Do nothing */
+          throw new Exception("Cannot cast request to ESIndexRequest")
+          /*count+=1
+          if (count >= batchsize){
+            val mybatch = batchsize
+            val elapsedTime = System.currentTimeMillis - startTime
+            val throughput = mybatch * 1000 / elapsedTime
+            logger.info(f"ESSender $id%d Insert $mybatch%d records in this batch, " +
+              f"elapsed time $elapsedTime%d ms, throughput $throughput%d ops, "+
+              f"total records $count%d")
 
-    request match {
-      case es_index_request:ESIndexRequest =>
-        brb.add(es_index_request.getIndexRequest);
-	    count+=1;
-	    if (brb.numberOfActions() >= batchsize) {
-	      sendBulkRequest
-	    }
-      case _ =>
-        count+=1
-        if (count >= batchsize){
-          val mybatch = batchsize
-          val elapsedTime = System.currentTimeMillis - startTime
-          val throughput = mybatch * 1000 / elapsedTime
-          logger.info(f"ESSender $id%d Insert $mybatch%d records in this batch, " +
-            f"elapsed time $elapsedTime%d ms, throughput $throughput%d ops, "+
-            f"total records $count%d")
-
-          startTime = System.currentTimeMillis
-	    }
-    }
+            startTime = System.currentTimeMillis
+	      }*/
+      }
     } catch {
       case e: Exception => logger.error(e.getMessage)
     }
@@ -133,6 +134,6 @@ class ESSender (
       f"total records $count%d")
 
     startTime = System.currentTimeMillis
-	}
+  }
 }
 

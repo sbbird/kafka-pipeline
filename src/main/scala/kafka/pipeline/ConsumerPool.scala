@@ -16,7 +16,8 @@ import kafka.pipeline.consumer._
 
 class ConsumerPool (
   private val messageQueue: BlockingQueue[String],
-  config:Configure
+  config:Configure,
+  private val consumerType:String
 ) extends ThreadPool (config) {
 
 
@@ -33,10 +34,20 @@ class ConsumerPool (
 
 
   def run: Unit = {
-    logger.info("Runnning")
-    val kafka_stream = getStreamFromServer(config.topicId, config.numConsumer)
-    kafka_stream.zipWithIndex.foreach {
-      case (s, i) => _executor.submit( new kafka.pipeline.consumer.Consumer(s, messageQueue, i))
+    consumerType match {
+      case "DummyConsumer" =>
+
+        for ( i <- 0 to config.numConsumer) {
+          _executor.submit( kafka.pipeline.consumer.Consumer(consumerType, null, messageQueue, i))
+        }
+
+      case _ =>
+        logger.info("Runnning")
+        val kafka_stream = getStreamFromServer(config.topicId, config.numConsumer)
+        kafka_stream.zipWithIndex.foreach {
+          case (s, i) => _executor.submit( kafka.pipeline.consumer.Consumer(consumerType, s, messageQueue, i))
+        }
+
     }
   }
 

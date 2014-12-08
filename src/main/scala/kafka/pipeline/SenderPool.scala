@@ -14,7 +14,9 @@ import kafka.pipeline.sender._
 
 class SenderPool (
   private val requestQueue: BlockingQueue[Request],
-  config:Configure
+  config:Configure,
+  private val senderType:String
+
 ) extends ThreadPool (config) {
 
   private val logger = LoggerFactory.getLogger(classOf[SenderPool])
@@ -27,9 +29,10 @@ class SenderPool (
   def run: Unit = {
     logger.info("Sender running")
 
-     for (i <- (1 to config.numSender)){
-      _executor.submit( new ESSender(requestQueue, i-1, config ) )
-    } 
+    for (i <- (1 to config.numSender)){
+
+      _executor.submit( Sender(senderType, requestQueue, i-1, config ) )
+    }
 
   }
 

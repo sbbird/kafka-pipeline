@@ -19,10 +19,32 @@ abstract class Sender (
 
     while(true){
       val request = requestQueue.take
-      send(request)
+      try {
+        send(request)
+      } catch
+      {
+        case e:Exception =>
+          logger.error(e.getMessage)
+          System.exit(-1)
+      }
+
     }
   }
 
-  def send(request:Request):Unit 
+  def send(request:Request):Unit
+
+}
+
+object Sender {
+  def apply(
+    senderType: String,
+    requestQueue: BlockingQueue[Request],
+    id:Int,
+    config:Configure
+  ) = senderType match {
+    case "ESSender" => new ESSender(requestQueue, id, config)
+    case _ => throw new Exception("Sender class " + senderType +" cannot be found")
+  }
+
 
 }

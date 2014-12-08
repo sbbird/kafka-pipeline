@@ -16,7 +16,9 @@ import kafka.pipeline.request.Request
 class HandlerPool (
   private val messageQueue: BlockingQueue[String],
   private val requestQueue: BlockingQueue[Request],
-  config:Configure
+  config:Configure,
+  private val handlerType:String
+
 ) extends ThreadPool (config) {
 
   private val logger = LoggerFactory.getLogger(classOf[HandlerPool])
@@ -29,9 +31,12 @@ class HandlerPool (
   def run: Unit = {
     logger.info("Handler running")
     for (i <- (1 to config.getNumHandler)){
-      _executor.submit( new BuildESRequestHandler(messageQueue, requestQueue, i-1, config))
+      //_executor.submit( new BuildESRequestHandler(messageQueue, requestQueue, i-1, config))
       //_executor.submit( new SimpleHandler(messageQueue, requestQueue, i-1, config))
+      //_executor.submit( new BuildGSPStorageRequestHandler(messageQueue, requestQueue, i-1, config))
+      _executor.submit( Handler(handlerType, messageQueue, requestQueue, i-1, config))
     }
+
   }
 
   def shutdown: Unit = {

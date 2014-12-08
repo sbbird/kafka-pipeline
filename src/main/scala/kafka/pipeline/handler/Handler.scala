@@ -6,6 +6,7 @@ import java.util.concurrent.{Executors,ExecutorService,BlockingQueue}
 import kafka.pipeline.common._
 import kafka.pipeline.request.Request
 
+
 abstract class Handler (
   private val messageQueue: BlockingQueue[String],
   private val requestQueue: BlockingQueue[Request],
@@ -18,7 +19,7 @@ abstract class Handler (
   override def run: Unit = {
     logger.info(f"Handler $id%d is starting")
 
-    var count = 0 
+    var count = 0
     while(true){
       count += 1
       val msg = messageQueue.take
@@ -34,6 +35,23 @@ abstract class Handler (
     }
   }
 
-  def handle(msg:String):Unit 
+  def handle(msg:String):Unit
+
+}
+
+
+object Handler {
+  def apply(
+    handlerType:String,
+    messageQueue: BlockingQueue[String],
+    requestQueue: BlockingQueue[Request],
+    id:Int,
+    config: Configure
+  ) = handlerType match {
+    case "SimpleHandler" => new SimpleHandler(messageQueue, requestQueue, id, config)
+    case "BuildESRequestHandler" => new BuildESRequestHandler(messageQueue, requestQueue, id, config)
+    case _ => throw new Exception("Handler class " + handlerType +" cannot be found")
+
+  }
 
 }

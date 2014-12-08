@@ -71,18 +71,18 @@ object main {
 
   def startConsumerPool (config: Configure): Unit ={
     logger.info("Starting consumer pool")
-    new ConsumerPool(messageQueue, config).run;
+    new ConsumerPool(messageQueue, config, "Consumer").run;
   }
 
   def startHandlerPool (config: Configure): Unit = {
     logger.info("Starting handler pool")
-    new HandlerPool(messageQueue, requestQueue, config).run
+    new HandlerPool(messageQueue, requestQueue, config, "BuildESRequestHandler").run
 
   }
 
   def startSenderPool (config: Configure): Unit = {
     logger.info("Starting sender pool")
-    new SenderPool(requestQueue, config).run
+    new SenderPool(requestQueue, config, "ESSender").run
   }
 
 }
