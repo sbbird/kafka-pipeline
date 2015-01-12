@@ -2,7 +2,7 @@ name := "kafka-pipeline"
 
 version := "0.6.0"
 
-scalaVersion := "2.10.4"
+scalaVersion := "2.11.1"
 
 fork := true
 
