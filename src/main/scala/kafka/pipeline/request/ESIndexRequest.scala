@@ -1,15 +1,10 @@
 package kafka.pipeline.request
 
-import scala.reflect._
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import collection.JavaConversions._
+import com.typesafe.scalalogging.StrictLogging
 
-class ESIndexRequest extends Request 
+class ESIndexRequest extends Request with StrictLogging
 {
-  private val logger = LoggerFactory.getLogger(classOf[ESIndexRequest])
-
-
   //private var source:String = null
   //var index:String = null
   private var indexRequest:org.elasticsearch.action.index.IndexRequest = _

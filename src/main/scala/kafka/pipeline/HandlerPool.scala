@@ -1,14 +1,9 @@
 package kafka.pipeline
 
-import kafka.consumer.{ConsumerConfig, KafkaStream, Consumer} 
-import kafka.javaapi.consumer.ConsumerConnector
+import com.typesafe.scalalogging.StrictLogging
 
-import java.util.concurrent.{Executors,ExecutorService,BlockingQueue}
+import java.util.concurrent.{Executors,BlockingQueue}
 
-import scala.collection.JavaConverters._
-
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import kafka.pipeline.common.ThreadPool
 import kafka.pipeline.handler._
 import kafka.pipeline.request.Request
@@ -20,9 +15,8 @@ class HandlerPool (
   private val requestQueue: BlockingQueue[Request],
   private val handlerType:String
 
-) extends ThreadPool{
+) extends ThreadPool with StrictLogging {
 
-  private val logger = LoggerFactory.getLogger(classOf[HandlerPool])
   private val handlerConfigure = KafkaPipelineConfigure.configure.handler
   private val _executor =  Option(Executors.newFixedThreadPool(handlerConfigure.number)) match {
     case Some(exe) => exe

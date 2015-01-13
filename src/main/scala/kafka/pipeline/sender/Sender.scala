@@ -1,14 +1,12 @@
 package kafka.pipeline.sender
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+
+import com.typesafe.scalalogging.StrictLogging
 import java.util.concurrent.{Executors,ExecutorService,BlockingQueue}
 
 import kafka.pipeline.common._
 import kafka.pipeline.request.Request
 
-abstract class Sender(requestQueue: BlockingQueue[Request], id: Int) extends Runnable {
-  private val logger = LoggerFactory.getLogger(classOf[Sender])
-
+abstract class Sender(requestQueue: BlockingQueue[Request], id: Int) extends Runnable with StrictLogging {
 
   override def run: Unit = {
     logger.info(f"Sender $id%d is starting")

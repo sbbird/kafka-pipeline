@@ -1,11 +1,10 @@
 package kafka.pipeline.consumer
 
 
-import scala.io.Source
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import com.typesafe.scalalogging.StrictLogging
 
-import kafka.consumer.{ConsumerConfig, KafkaStream, Consumer, ConsumerIterator} 
+import scala.io.Source
+import kafka.consumer.{ KafkaStream}
 import kafka.javaapi.consumer.ConsumerConnector
 
 import java.util.concurrent.{Executors,ExecutorService,BlockingQueue}
@@ -14,12 +13,7 @@ import java.util.concurrent.{Executors,ExecutorService,BlockingQueue}
 class DummyConsumer (
   kafkaStream:KafkaStream[Array[Byte], Array[Byte]],
   messageQueue: BlockingQueue[String],
-  id:Int ) extends Consumer(kafkaStream, messageQueue, id)
-{
-
-  private val logger = LoggerFactory.getLogger(classOf[DummyConsumer])
-
-
+  id:Int ) extends Consumer(kafkaStream, messageQueue, id) with StrictLogging {
 
   override def run():Unit = {
 

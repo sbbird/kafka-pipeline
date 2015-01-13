@@ -1,9 +1,7 @@
 package kafka.pipeline.handler
 
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
+import com.typesafe.scalalogging.StrictLogging
 import java.util.concurrent.{Executors,ExecutorService,BlockingQueue}
 
 import kafka.pipeline.request.Request
@@ -15,12 +13,9 @@ class BuildESRequestHandler (
   requestQueue: BlockingQueue[Request],
   id: Int
 )
-extends Handler ( messageQueue, requestQueue, id) {
-
-  private val logger = LoggerFactory.getLogger(classOf[BuildESRequestHandler])
+extends Handler ( messageQueue, requestQueue, id) with StrictLogging {
 
   private val builder = new ESIndexRequestBuilder
-
 
   override def handle(msg:String):Unit = {
     try{

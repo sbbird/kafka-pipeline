@@ -1,10 +1,8 @@
 package kafka.pipeline.consumer
 
 
-import kafka.consumer.{ConsumerConfig, KafkaStream, Consumer, ConsumerIterator} 
-import kafka.javaapi.consumer.ConsumerConnector
+import kafka.consumer.{ConsumerConfig, KafkaStream, Consumer, ConsumerIterator}
 import com.typesafe.scalalogging._
-import org.slf4j.LoggerFactory
 
 import java.util.concurrent.{Executors,ExecutorService,BlockingQueue}
 
@@ -12,14 +10,10 @@ import java.util.concurrent.{Executors,ExecutorService,BlockingQueue}
 class Consumer (
   protected val kafkaStream:KafkaStream[Array[Byte], Array[Byte]],
   protected val messageQueue: BlockingQueue[String],
-  protected val id:Int ) extends Runnable
+  protected val id:Int ) extends Runnable with StrictLogging
 {
 
   override def run():Unit = {
-
-    val logger = Logger(LoggerFactory.getLogger("name"))
-
-
 
     logger.info(f"Consumer $id%d is starting")
 

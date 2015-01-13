@@ -6,8 +6,6 @@ import java.util.Date
 
 import kafka.pipeline.config.KafkaPipelineConfigure
 import kafka.pipeline.request.ESIndexRequest
-import org.slf4j.LoggerFactory
-
 
 import org.joda.time.DateTime
 import org.joda.time.format._
@@ -16,45 +14,14 @@ import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
 import com.fasterxml.jackson.databind.{DeserializationFeature, ObjectMapper}
 
+import com.typesafe.scalalogging.StrictLogging
 
-class ESIndexRequestBuilder extends Builder {
-  private val logger = LoggerFactory.getLogger(classOf[ESIndexRequestBuilder])
+class ESIndexRequestBuilder extends Builder with StrictLogging{
   private val handlerConfigure = KafkaPipelineConfigure.configure.handler
 
   def createIndexRequest(msg:String):ESIndexRequest = {
     val ir = new ESIndexRequest
     val formatter = getFormaterWithMultipleParser
-
-
-    //val json = scala.util.parsing.json.JSON.parseFull(msg)
-
-    /*
-    val ts_vstring:String = json match {
-      /* Compiler warnning:
-       *
-       *  non-variable type argument String in type pattern Map[String,Any] is unchecked since it is eliminated by erasure
-       *
-       */
-      case Some(m: Map[String, Any]) => m(config.getTimestampFieldName) match {
-        case s: String => s
-        case _ => throw new Exception("Timestamp field: ["+config.getTimestampFieldName+"] cannot be found")
-      }
-      case _ => throw new Exception("Parse error")
-     }*/
-
-
-
-/*
-    val jsonmap = json match {
-//      case Some(m: Map[String, Any]) => collection.mutable.Map(m.toSeq: _*) // convert immutable map to mutable map
-      case Some(m: Map[String, Any]) => m
-      case _ =>
-        //logger.error("Parsing JSON error")
-        throw new Exception("Parse error")
-    }
- */
-
-
 
     val jsonmap: Map[String, Any] = JsonUtil.toMap[Any](msg)
 
@@ -66,14 +33,7 @@ class ESIndexRequestBuilder extends Builder {
         throw new Exception("Parse error")
     }
 
-    
-
-
-    //val ts_date = parseDate(ts_vstring, config.timestampFormatString)
     val ts_date = formatter.parseDateTime(ts_vstring)
-    //jsonmap.put("@timestamp", ts_date.toDate)
-
-
 
     val typename = jsonmap("type") match {
       case s: String => s
@@ -92,7 +52,7 @@ class ESIndexRequestBuilder extends Builder {
 
 
 
-  /* generating index like [prefix]-[type]-yyyy-MM-dd:Zone*/
+  /** generating index like [prefix]-[type]-yyyy-MM-dd:Zone*/
   protected def createIndex(output_timestamp: DateTime, typename:String):String =  {
     
 //    val index_date_format:SimpleDateFormat = new SimpleDateFormat(config.indexDateFormatString)

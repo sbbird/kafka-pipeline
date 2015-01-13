@@ -1,13 +1,10 @@
 package kafka.pipeline
 
-import java.util.concurrent.{Executors,ExecutorService,BlockingQueue}
-import scala.collection.JavaConverters._
+import java.util.concurrent.{Executors,BlockingQueue}
+import com.typesafe.scalalogging.StrictLogging
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 import kafka.pipeline.common.ThreadPool
-import kafka.pipeline.handler._
 import kafka.pipeline.request.Request
 import kafka.pipeline.sender._
 
@@ -17,9 +14,8 @@ class SenderPool (
   private val requestQueue: BlockingQueue[Request],
   private val senderType:String
 
-) extends ThreadPool  {
+) extends ThreadPool with StrictLogging {
 
-  private val logger = LoggerFactory.getLogger(classOf[SenderPool])
   private val senderConfigure = KafkaPipelineConfigure.configure.sender
   private val _executor =  Option(Executors.newFixedThreadPool(senderConfigure.number)) match {
     case Some(exe) => exe

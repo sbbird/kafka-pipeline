@@ -2,7 +2,6 @@ package kafka.pipeline
 
 import kafka.consumer.ConsumerConfig;
 import kafka.consumer.KafkaStream;
-import kafka.javaapi.consumer.ConsumerConnector;
 import kafka.consumer.Consumer
 
 

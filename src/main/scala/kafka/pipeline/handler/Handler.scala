@@ -1,6 +1,6 @@
 package kafka.pipeline.handler
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+
+import com.typesafe.scalalogging.StrictLogging
 import java.util.concurrent.{Executors,ExecutorService,BlockingQueue}
 
 import kafka.pipeline.request.Request
@@ -10,9 +10,7 @@ abstract class Handler (
   private val messageQueue: BlockingQueue[String],
   private val requestQueue: BlockingQueue[Request],
   private val id:Int
-) extends Runnable {
-  private val logger = LoggerFactory.getLogger(classOf[Handler])
-
+) extends Runnable with StrictLogging {
 
   override def run: Unit = {
     logger.info(f"Handler $id%d is starting")

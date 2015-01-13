@@ -1,9 +1,5 @@
 package kafka.pipeline.handler
 
-
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
 import java.util.concurrent.{Executors,ExecutorService,BlockingQueue}
 
 import kafka.pipeline.request._
@@ -14,10 +10,6 @@ class SimpleHandler (
   id: Int
 )
 extends Handler ( messageQueue, requestQueue, id) {
-
-
-
-  private val logger = LoggerFactory.getLogger(classOf[SimpleHandler])
 
   override def handle(msg:String):Unit = {
     try{

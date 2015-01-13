@@ -2,33 +2,24 @@ package kafka.pipeline.sender
 
 import java.util.concurrent.{Executors,ExecutorService,BlockingQueue}
 
-import scala.collection.JavaConverters._
+import com.typesafe.scalalogging.StrictLogging
 
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
-import org.elasticsearch.action.bulk.BulkResponse;
-import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
-import org.elasticsearch.common.joda.time.DateTimeZone;
-import org.elasticsearch.common.joda.time.format.ISODateTimeFormat;
-import org.elasticsearch.common.settings.ImmutableSettings;
-import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.common.transport.InetSocketTransportAddress;
-import org.elasticsearch.common.xcontent.XContentBuilder;
-import org.elasticsearch.common.xcontent.XContentFactory;
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-import kafka.pipeline.common._
-import kafka.pipeline.handler._
+import org.elasticsearch.common.settings.ImmutableSettings;
+
+import org.elasticsearch.common.transport.InetSocketTransportAddress;
+
+
 import kafka.pipeline.request.Request
 import kafka.pipeline.request.ESIndexRequest
 import kafka.pipeline.config._
 
 
-class ESSender(requestQueue: BlockingQueue[Request], id: Int) extends Sender (requestQueue, id) {
+class ESSender(requestQueue: BlockingQueue[Request], id: Int) extends Sender (requestQueue, id) with StrictLogging {
 
-  private val logger = LoggerFactory.getLogger(classOf[ESSender])
   private val senderConfigure = KafkaPipelineConfigure.configure.sender
   private val client = createESClient()
 

@@ -1,31 +1,16 @@
 package kafka.pipeline
 
-
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-//import org.apache.log4j.Logger;
-import org.apache.log4j.BasicConfigurator;
-
-
-
 import java.util.concurrent.{ArrayBlockingQueue, BlockingQueue}
-import scala.collection.JavaConverters._
 import java.io.FileInputStream
 
+import com.typesafe.scalalogging.StrictLogging
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
-
-import kafka.pipeline.common._
 import kafka.pipeline.request.Request
 
 class main {
 }
 
-object main {
-
-  private val logger = LoggerFactory.getLogger(classOf[main])
+object main extends StrictLogging {
 
   val queueSize = 16384
   val messageQueue: BlockingQueue[String] = new ArrayBlockingQueue[String](queueSize)

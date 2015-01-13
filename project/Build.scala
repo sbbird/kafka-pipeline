@@ -13,9 +13,9 @@ object KafkaPipelineBuild extends Build {
 	
   val kafka = "org.apache.kafka" %% "kafka" % "0.8.2-beta" exclude("com.sun.jdmk", "jmxtools") exclude("com.sun.jmx", "jmxri")
   //val yammer = "com.yammer.metrics" % "metrics-core" % yammerVersion
-  val log4j = "log4j" % "log4j" % "1.2.17"  exclude("com.sun.jmx", "jmxri") exclude("com.sun.jdmk", "jmxtools") exclude("javax.jms", "jms")
+  //val log4j = "log4j" % "log4j" % "1.2.17"  exclude("com.sun.jmx", "jmxri") exclude("com.sun.jdmk", "jmxtools") exclude("javax.jms", "jms")
 
-  val slf4j = "org.slf4j" % "slf4j-simple" % "1.6.4"
+  //val slf4j = "org.slf4j" % "slf4j-simple" % "1.6.4"
   val zookeeper = "org.apache.zookeeper" % "zookeeper" % "3.3.4" exclude("com.sun.jmx", "jmxri") exclude("com.sun.jdmk", "jmxtools") exclude("javax.jms", "jms") // don't add any any extra dependencies
 
   val elasticsearch = "org.elasticsearch" % "elasticsearch" % "1.3.4"
