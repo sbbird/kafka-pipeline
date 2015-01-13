@@ -55,17 +55,17 @@ object KafkaPipelineConfigure extends StrictLogging {
           typeName = config.getString("kafkaPipeline.handler.index.typeName")
         ),
         format = FormatConfigure(
-          timestampFieldName = config.getString("kafkaPipeline.handler.formatConfigure.timestampFieldName"),
-          timestampOutputFormatString = config.getString("kafkaPipeline.handler.formatConfigure.timestampOutputFormatString"),
-          timestampFormatString = config.getString("kafkaPipeline.handler.formatConfigure.timestampFormatString")
+          timestampFieldName = config.getString("kafkaPipeline.handler.format.timestampFieldName"),
+          timestampOutputFormatString = config.getString("kafkaPipeline.handler.format.timestampOutputFormatString"),
+          timestampFormatString = config.getString("kafkaPipeline.handler.format.timestampFormatString")
         )
       ),
       sender = SenderConfigure(
-        number = config.getInt("kafkaPipeline.senderConfigure.number"),
-        batchSize = config.getInt("kafkaPipeline.senderConfigure.batchSize"),
+        number = config.getInt("kafkaPipeline.sender.number"),
+        batchSize = config.getInt("kafkaPipeline.sender.batchSize"),
         elasticsearch = ElasticsearchConfigure(
-          hosts = config.getString("kafkaPipeline.senderConfigure.elasticsearchConfigure.hosts"),
-          cluster = config.getString("kafkaPipeline.senderConfigure.elasticsearchConfigure.cluster")
+          hosts = config.getString("kafkaPipeline.sender.elasticsearch.hosts"),
+          cluster = config.getString("kafkaPipeline.sender.elasticsearch.cluster")
         )
       )
     )
