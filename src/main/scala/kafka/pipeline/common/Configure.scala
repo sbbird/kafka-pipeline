@@ -4,7 +4,7 @@ import scala.collection.immutable.Map
 import java.text.ParseException
 import scala.language.implicitConversions
 import scala.reflect._
-
+/*
 @BeanInfo
 class Configure (private val prop:Map[String, String]) {
 
@@ -65,7 +65,7 @@ class Configure (private val prop:Map[String, String]) {
 
 
 
-
+*/
 
 
 

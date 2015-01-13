@@ -2,29 +2,24 @@ package kafka.pipeline.request.builder
 
 import java.text.SimpleDateFormat
 import java.util.Date
-import java.util.TimeZone
 
 
-import kafka.pipeline.common.Configure
+import kafka.pipeline.config.KafkaPipelineConfigure
 import kafka.pipeline.request.ESIndexRequest
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import scala.collection.mutable.StringBuilder
+
 
 import org.joda.time.DateTime
 import org.joda.time.format._
 
-
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
 import com.fasterxml.jackson.databind.{DeserializationFeature, ObjectMapper}
-//import org.elasticsearch.common.joda.time.format._
-//import org.elasticsearch.common.joda._
 
-class ESIndexRequestBuilder (config:Configure) extends Builder (config) {
+
+class ESIndexRequestBuilder extends Builder {
   private val logger = LoggerFactory.getLogger(classOf[ESIndexRequestBuilder])
-
+  private val handlerConfigure = KafkaPipelineConfigure.configure.handler
 
   def createIndexRequest(msg:String):ESIndexRequest = {
     val ir = new ESIndexRequest
@@ -59,12 +54,14 @@ class ESIndexRequestBuilder (config:Configure) extends Builder (config) {
     }
  */
 
+
+
     val jsonmap: Map[String, Any] = JsonUtil.toMap[Any](msg)
 
-    val ts_vstring = jsonmap(config.getTimestampFieldName) match {
+    val ts_vstring = jsonmap(handlerConfigure.format.timestampFieldName) match {
       case s: String => s
       case _ =>
-        logger.error("Timestamp field: ["+config.getTimestampFieldName+"] cannot be found")
+        logger.error("Timestamp field: ["+handlerConfigure.format.timestampFieldName+"] cannot be found")
         logger.error(msg)
         throw new Exception("Parse error")
     }
@@ -85,9 +82,9 @@ class ESIndexRequestBuilder (config:Configure) extends Builder (config) {
 
     val index = createIndex(ts_date, typename)
 
-    ir.createRequest(index, config.getIndexType)
+    ir.createRequest(index, handlerConfigure.index.typeName)
     ir.source(jsonmap.toMap)
-    config.getIndexTTL match {
+    handlerConfigure.index.ttl match {
       case x if x > 0 =>   ir.tll(x)
     }
     ir
@@ -109,9 +106,9 @@ class ESIndexRequestBuilder (config:Configure) extends Builder (config) {
 //	index_builder.toString
 
 
-    val formatter:DateTimeFormatter = DateTimeFormat.forPattern(config.indexDateFormatString).withZoneUTC
+    val formatter:DateTimeFormatter = DateTimeFormat.forPattern(handlerConfigure.index.nameDateFormat).withZoneUTC
     val index_date_string = formatter.print(output_timestamp)
-    var index_builder:StringBuilder = new StringBuilder(config.indexNamePrefix)
+    val index_builder = new scala.collection.mutable.StringBuilder(handlerConfigure.index.namePrefix)
 
     index_builder.append(typename)
     index_builder.append("-")
@@ -130,7 +127,7 @@ class ESIndexRequestBuilder (config:Configure) extends Builder (config) {
   private def getFormaterWithMultipleParser():DateTimeFormatter = {
 
 
-    val parsers = config.timestampFormatString.split(";").map{
+    val parsers = handlerConfigure.index.nameDateFormat.split(";").map{
       s => DateTimeFormat.forPattern(s).getParser
     }
 

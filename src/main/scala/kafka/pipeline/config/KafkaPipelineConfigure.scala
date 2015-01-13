@@ -37,33 +37,33 @@ object KafkaPipelineConfigure extends StrictLogging {
 
   def mapToKafkaPipelineConfigure(config:Config) =
     new KafkaPipelineConfigure(
-      consumerConfigure = ConsumerConfigure(
+      consumer = ConsumerConfigure(
         number = config.getInt("kafkaPipeline.consumer.number"),
-        kafkaConfigure = KafkaConfigure(
+        kafka = KafkaConfigure(
           brokerList = config.getString("kafkaPipeline.consumer.kafka.brokerList"),
           topicId = config.getString("kafkaPipeline.consumer.kafka.topicId"),
           groupId = config.getString("kafkaPipeline.consumer.kafka.groupId"),
           zookeeperConnect = config.getString("kafkaPipeline.consumer.kafka.zookeeperConnect")
         )
       ),
-      handlerConfigure = HandlerConfigure(
+      handler = HandlerConfigure(
         number = config.getInt("kafkaPipeline.handler.number"),
-        indexConfigure = IndexConfigure(
+        index = IndexConfigure(
           namePrefix = config.getString("kafkaPipeline.handler.index.namePrefix"),
           nameDateFormat = config.getString("kafkaPipeline.handler.index.nameDateFormat"),
           ttl = config.getInt("kafkaPipeline.handler.index.ttl"),
           typeName = config.getString("kafkaPipeline.handler.index.typeName")
         ),
-        formatConfigure = FormatConfigure(
+        format = FormatConfigure(
           timestampFieldName = config.getString("kafkaPipeline.handler.formatConfigure.timestampFieldName"),
           timestampOutputFormatString = config.getString("kafkaPipeline.handler.formatConfigure.timestampOutputFormatString"),
           timestampFormatString = config.getString("kafkaPipeline.handler.formatConfigure.timestampFormatString")
         )
       ),
-      senderConfigure = SenderConfigure(
+      sender = SenderConfigure(
         number = config.getInt("kafkaPipeline.senderConfigure.number"),
         batchSize = config.getInt("kafkaPipeline.senderConfigure.batchSize"),
-        elasticsearchConfigure = ElasticsearchConfigure(
+        elasticsearch = ElasticsearchConfigure(
           hosts = config.getString("kafkaPipeline.senderConfigure.elasticsearchConfigure.hosts"),
           cluster = config.getString("kafkaPipeline.senderConfigure.elasticsearchConfigure.cluster")
         )
@@ -75,38 +75,38 @@ object KafkaPipelineConfigure extends StrictLogging {
 
 
 case class KafkaPipelineConfigure(
-  val consumerConfigure: ConsumerConfigure,
-  val handlerConfigure: HandlerConfigure,
-  val senderConfigure: SenderConfigure)
+   consumer: ConsumerConfigure,
+   handler: HandlerConfigure,
+   sender: SenderConfigure)
 
 case class ConsumerConfigure(
-  val number: Int,
-  val kafkaConfigure: KafkaConfigure)
+   number: Int,
+   kafka: KafkaConfigure)
 case class KafkaConfigure(
-  val brokerList: String,
-  val topicId: String,
-  val groupId: String,
-  val zookeeperConnect: String)
+   brokerList: String,
+   topicId: String,
+   groupId: String,
+   zookeeperConnect: String)
 
 case class HandlerConfigure(
-  val number: Int,
-  val indexConfigure: IndexConfigure,
-  val formatConfigure: FormatConfigure)
+   number: Int,
+   index: IndexConfigure,
+   format: FormatConfigure)
 case class IndexConfigure(
-  val namePrefix:String,
-  val nameDateFormat:String,
-  val ttl: Int,
-  val typeName: String)
+   namePrefix:String,
+   nameDateFormat:String,
+   ttl: Int,
+   typeName: String)
 case class FormatConfigure(
-  val timestampFieldName:String,
-  val timestampOutputFormatString: String,
-  val timestampFormatString: String)
+   timestampFieldName:String,
+   timestampOutputFormatString: String,
+   timestampFormatString: String)
 
 case class SenderConfigure(
-  val number:Int,
-  val batchSize: Int,
-  val elasticsearchConfigure: ElasticsearchConfigure)
+   number:Int,
+   batchSize: Int,
+   elasticsearch: ElasticsearchConfigure)
 case class ElasticsearchConfigure(
-  val hosts:String,
-  val cluster:String)
+   hosts:String,
+   cluster:String)
 

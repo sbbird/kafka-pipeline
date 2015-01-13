@@ -9,22 +9,22 @@ import kafka.javaapi.consumer.ConsumerConnector
 import java.util.concurrent.{Executors,ExecutorService,BlockingQueue}
 import java.util
 
-import kafka.pipeline.common._
+import kafka.pipeline.common.ThreadPool
 import scala.collection.JavaConverters._
 import kafka.pipeline.consumer._
 
+import kafka.pipeline.config._
 
 class ConsumerPool (
   private val messageQueue: BlockingQueue[String],
-  config:Configure,
   private val consumerType:String
-) extends ThreadPool (config) {
+) extends ThreadPool {
 
 
   private val logger = LoggerFactory.getLogger(classOf[ConsumerPool])
+  private val consumerConfigure = KafkaPipelineConfigure.configure.consumer
 
-
-  private val _executor =  Option(Executors.newFixedThreadPool(config.numConsumer)) match {
+  private val _executor =  Option(Executors.newFixedThreadPool(consumerConfigure.number)) match {
     case Some(exe) => exe
     case None => throw new Exception("Failed to create executor service")
   }
@@ -37,13 +37,13 @@ class ConsumerPool (
     consumerType match {
       case "DummyConsumer" =>
 
-        for ( i <- 0 to config.numConsumer) {
+        for ( i <- 0 to consumerConfigure.number) {
           _executor.submit( kafka.pipeline.consumer.Consumer(consumerType, null, messageQueue, i))
         }
 
       case _ =>
         logger.info("Runnning")
-        val kafka_stream = getStreamFromServer(config.topicId, config.numConsumer)
+        val kafka_stream = getStreamFromServer(consumerConfigure.kafka.topicId, consumerConfigure.number)
         kafka_stream.zipWithIndex.foreach {
           case (s, i) => _executor.submit( kafka.pipeline.consumer.Consumer(consumerType, s, messageQueue, i))
         }
@@ -63,7 +63,7 @@ class ConsumerPool (
   {
     _consumerConnector = 
        kafka.consumer.Consumer.createJavaConsumerConnector(
-        createConsumerConfig(config.zookeeperConnect, config.groupId)
+        createConsumerConfig(consumerConfigure.kafka.zookeeperConnect, consumerConfigure.kafka.groupId)
       )
 
     val topicCountMap = new java.util.HashMap[String, Integer]

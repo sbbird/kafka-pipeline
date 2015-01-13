@@ -4,7 +4,7 @@ package kafka.pipeline.consumer
 import kafka.consumer.{ConsumerConfig, KafkaStream, Consumer, ConsumerIterator} 
 import kafka.javaapi.consumer.ConsumerConnector
 import com.typesafe.scalalogging._
-
+import org.slf4j.LoggerFactory
 
 import java.util.concurrent.{Executors,ExecutorService,BlockingQueue}
 
@@ -12,7 +12,7 @@ import java.util.concurrent.{Executors,ExecutorService,BlockingQueue}
 class Consumer (
   protected val kafkaStream:KafkaStream[Array[Byte], Array[Byte]],
   protected val messageQueue: BlockingQueue[String],
-  protected val id:Int ) extends Runnable with Logging
+  protected val id:Int ) extends Runnable
 {
 
   override def run():Unit = {

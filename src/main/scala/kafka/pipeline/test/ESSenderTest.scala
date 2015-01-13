@@ -18,7 +18,7 @@ object ESSenderTest {
 
   def main(args: Array[String]): Unit = {
 
-
+  /*
 
     //BasicConfigurator.configure();
 
@@ -27,11 +27,11 @@ object ESSenderTest {
     val config = new Configure(props.asScala.toMap)
     println("Configure is "+config.toString())
 
-    val testbuilder = new ESIndexRequestBuilder(config)
+    val testbuilder = new ESIndexRequestBuilder
 
     val inputjson = "hello"
 
-    val essender = new ESSender(new ArrayBlockingQueue[Request](100), 0, config)
+    val essender = new ESSender(new ArrayBlockingQueue[Request](100), 0)
 
     for(line <- Source.fromFile("/home/sbbird/test.json").getLines())
     {
@@ -40,5 +40,8 @@ object ESSenderTest {
       println(request)
       essender.send(request)
     }
+
+    */
   }
+
 }

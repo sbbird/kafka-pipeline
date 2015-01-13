@@ -9,32 +9,33 @@ import scala.collection.JavaConverters._
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import kafka.pipeline.common._
+import kafka.pipeline.common.ThreadPool
 import kafka.pipeline.handler._
 import kafka.pipeline.request.Request
+
+import kafka.pipeline.config._
 
 class HandlerPool (
   private val messageQueue: BlockingQueue[String],
   private val requestQueue: BlockingQueue[Request],
-  config:Configure,
   private val handlerType:String
 
-) extends ThreadPool (config) {
+) extends ThreadPool{
 
   private val logger = LoggerFactory.getLogger(classOf[HandlerPool])
-
-  private val _executor =  Option(Executors.newFixedThreadPool(config.numHandler)) match {
+  private val handlerConfigure = KafkaPipelineConfigure.configure.handler
+  private val _executor =  Option(Executors.newFixedThreadPool(handlerConfigure.number)) match {
     case Some(exe) => exe
     case None => throw new Exception("Failed to create executor service")
   }  
 
   def run: Unit = {
     logger.info("Handler running")
-    for (i <- (1 to config.getNumHandler)){
+    for (i <- (1 to handlerConfigure.number)){
       //_executor.submit( new BuildESRequestHandler(messageQueue, requestQueue, i-1, config))
       //_executor.submit( new SimpleHandler(messageQueue, requestQueue, i-1, config))
       //_executor.submit( new BuildGSPStorageRequestHandler(messageQueue, requestQueue, i-1, config))
-      _executor.submit( Handler(handlerType, messageQueue, requestQueue, i-1, config))
+      _executor.submit( Handler(handlerType, messageQueue, requestQueue, i-1))
     }
 
   }

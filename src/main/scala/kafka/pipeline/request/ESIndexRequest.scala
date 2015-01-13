@@ -5,7 +5,6 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import collection.JavaConversions._
 
-@BeanInfo
 class ESIndexRequest extends Request 
 {
   private val logger = LoggerFactory.getLogger(classOf[ESIndexRequest])
@@ -13,7 +12,8 @@ class ESIndexRequest extends Request
 
   //private var source:String = null
   //var index:String = null
-  @BeanProperty var indexRequest:org.elasticsearch.action.index.IndexRequest = null
+  private var indexRequest:org.elasticsearch.action.index.IndexRequest = _
+  def getIndexRequest = indexRequest
   def createRequest(index:String, typeName:String) = {
     indexRequest = new org.elasticsearch.action.index.IndexRequest(index, typeName)
   }

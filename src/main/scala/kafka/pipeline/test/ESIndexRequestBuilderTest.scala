@@ -19,18 +19,18 @@ object ESIndexRequestBuilderTest {
 
 
     //BasicConfigurator.configure();
-
+/**
     val props = new java.util.Properties()
     props.load(new FileInputStream("/home/sbbird/workspace/scala/kafka-pipeline/conf/config.properties"))
     val config = new Configure(props.asScala.toMap)
     println("Configure is "+config.toString())
 
-    val testbuilder = new ESIndexRequestBuilder(config)
+    val testbuilder = new ESIndexRequestBuilder
 
     val inputjson = "hello"
 
     for(line <- Source.fromFile("/home/sbbird/test.json").getLines())
       println(testbuilder.createIndexRequest(line))
-
+*/
   }
 }

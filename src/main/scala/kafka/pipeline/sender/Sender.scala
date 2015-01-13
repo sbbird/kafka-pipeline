@@ -6,11 +6,7 @@ import java.util.concurrent.{Executors,ExecutorService,BlockingQueue}
 import kafka.pipeline.common._
 import kafka.pipeline.request.Request
 
-abstract class Sender (
-  protected val requestQueue: BlockingQueue[Request],
-  protected val id:Int,
-  protected val config:Configure
-) extends Runnable {
+abstract class Sender(requestQueue: BlockingQueue[Request], id: Int) extends Runnable {
   private val logger = LoggerFactory.getLogger(classOf[Sender])
 
 
@@ -36,13 +32,8 @@ abstract class Sender (
 }
 
 object Sender {
-  def apply(
-    senderType: String,
-    requestQueue: BlockingQueue[Request],
-    id:Int,
-    config:Configure
-  ) = senderType match {
-    case "ESSender" => new ESSender(requestQueue, id, config)
+  def apply(senderType: String, requestQueue: BlockingQueue[Request], id: Int) = senderType match {
+    case "ESSender" => new ESSender(requestQueue, id)
     case _ => throw new Exception("Sender class " + senderType +" cannot be found")
   }
 

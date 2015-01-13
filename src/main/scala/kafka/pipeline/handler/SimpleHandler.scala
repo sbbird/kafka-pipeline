@@ -6,16 +6,14 @@ import org.slf4j.LoggerFactory
 
 import java.util.concurrent.{Executors,ExecutorService,BlockingQueue}
 
-import kafka.pipeline.common._
 import kafka.pipeline.request._
 
 class SimpleHandler (
   messageQueue: BlockingQueue[String],
   requestQueue: BlockingQueue[Request],
-  id: Int,
-  config: Configure
+  id: Int
 )
-extends Handler ( messageQueue, requestQueue, id, config) {
+extends Handler ( messageQueue, requestQueue, id) {
 
 
 

@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory
 
 import java.util.concurrent.{Executors,ExecutorService,BlockingQueue}
 
-import kafka.pipeline.common._
 import kafka.pipeline.request.Request
 import kafka.pipeline.request.builder.ESIndexRequestBuilder
 
@@ -14,14 +13,13 @@ import kafka.pipeline.request.builder.ESIndexRequestBuilder
 class BuildESRequestHandler (
   messageQueue: BlockingQueue[String],
   requestQueue: BlockingQueue[Request],
-  id: Int,
-  config: Configure  
+  id: Int
 )
-extends Handler ( messageQueue, requestQueue, id, config) {
+extends Handler ( messageQueue, requestQueue, id) {
 
   private val logger = LoggerFactory.getLogger(classOf[BuildESRequestHandler])
 
-  private val builder = new ESIndexRequestBuilder(config)
+  private val builder = new ESIndexRequestBuilder
 
 
   override def handle(msg:String):Unit = {

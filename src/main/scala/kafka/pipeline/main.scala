@@ -51,38 +51,32 @@ object main {
     val config_file = args(0)
     val props = new java.util.Properties()
     //props.load(new FileInputStream("/home/sbbird/workspace/scala/kafka-pipeline/conf/config.properties"))
-
+    /** TODO: Initial KafkaPipelineConfigure */
     props.load(new FileInputStream(config_file))
-    val config = new Configure(props.asScala.toMap)
-    logger.info("Configure is ")
-    logger.info(config.toString)
-
-    startAll(config)
-    
+    startAll()
   }
 
-
-  def startAll (config: Configure): Unit = {
-    startConsumerPool(config)
-    startHandlerPool(config)
-    startSenderPool(config)
+  def startAll(): Unit = {
+    startConsumerPool()
+    startHandlerPool()
+    startSenderPool()
 
   }
 
-  def startConsumerPool (config: Configure): Unit ={
+  def startConsumerPool(): Unit ={
     logger.info("Starting consumer pool")
-    new ConsumerPool(messageQueue, config, "Consumer").run;
+    new ConsumerPool(messageQueue, "Consumer").run;
   }
 
-  def startHandlerPool (config: Configure): Unit = {
+  def startHandlerPool(): Unit = {
     logger.info("Starting handler pool")
-    new HandlerPool(messageQueue, requestQueue, config, "BuildESRequestHandler").run
+    new HandlerPool(messageQueue, requestQueue, "BuildESRequestHandler").run
 
   }
 
-  def startSenderPool (config: Configure): Unit = {
+  def startSenderPool(): Unit = {
     logger.info("Starting sender pool")
-    new SenderPool(requestQueue, config, "ESSender").run
+    new SenderPool(requestQueue, "ESSender").run
   }
 
 }

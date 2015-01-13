@@ -6,9 +6,7 @@ import java.util
 import kafka.pipeline.common._
 import scala.collection.JavaConverters._
 
-
-abstract class ThreadPool (
-  private val config:Configure ) {
+abstract class ThreadPool {
 
   def run: Unit
 

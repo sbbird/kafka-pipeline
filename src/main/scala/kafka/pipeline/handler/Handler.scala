@@ -3,15 +3,13 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.util.concurrent.{Executors,ExecutorService,BlockingQueue}
 
-import kafka.pipeline.common._
 import kafka.pipeline.request.Request
 
 
 abstract class Handler (
   private val messageQueue: BlockingQueue[String],
   private val requestQueue: BlockingQueue[Request],
-  private val id:Int,
-  private val config: Configure
+  private val id:Int
 ) extends Runnable {
   private val logger = LoggerFactory.getLogger(classOf[Handler])
 
@@ -45,11 +43,10 @@ object Handler {
     handlerType:String,
     messageQueue: BlockingQueue[String],
     requestQueue: BlockingQueue[Request],
-    id:Int,
-    config: Configure
+    id:Int
   ) = handlerType match {
-    case "SimpleHandler" => new SimpleHandler(messageQueue, requestQueue, id, config)
-    case "BuildESRequestHandler" => new BuildESRequestHandler(messageQueue, requestQueue, id, config)
+    case "SimpleHandler" => new SimpleHandler(messageQueue, requestQueue, id)
+    case "BuildESRequestHandler" => new BuildESRequestHandler(messageQueue, requestQueue, id)
     case _ => throw new Exception("Handler class " + handlerType +" cannot be found")
 
   }

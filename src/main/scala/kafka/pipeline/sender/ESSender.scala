@@ -23,31 +23,26 @@ import kafka.pipeline.common._
 import kafka.pipeline.handler._
 import kafka.pipeline.request.Request
 import kafka.pipeline.request.ESIndexRequest
+import kafka.pipeline.config._
 
 
-class ESSender (
-  requestQueue: BlockingQueue[Request],
-  id:Int,
-  config:Configure
-) extends Sender ( requestQueue, id, config) {
+class ESSender(requestQueue: BlockingQueue[Request], id: Int) extends Sender (requestQueue, id) {
 
   private val logger = LoggerFactory.getLogger(classOf[ESSender])
-
-  private val client = createESClient(config)
+  private val senderConfigure = KafkaPipelineConfigure.configure.sender
+  private val client = createESClient()
 
   private var brb = Option(client.prepareBulk()) match {
     case Some(b:BulkRequestBuilder) => b
     case None => throw new Exception("Failed to connect to ES hosts")
   }
 
-  private val batchsize = config.getBatchSize
+  private val batchsize = senderConfigure.batchSize
 
 
   private var count = 0
 
   private var startTime = System.currentTimeMillis
-
-
 
   override def send(request:Request):Unit =  {
    
@@ -92,10 +87,10 @@ class ESSender (
 
   
 
-  private def createESClient(config:Configure):Client = {
-    val hosts = config.getESHosts.split(",")
+  private def createESClient():Client = {
+    val hosts = senderConfigure.elasticsearch.hosts.split(",")
     val settings = ImmutableSettings.settingsBuilder()
-      .put("cluster.name", config.getESClusterName).build()
+      .put("cluster.name", senderConfigure.elasticsearch.cluster).build()
     val transport = new TransportClient(settings)
 
 
